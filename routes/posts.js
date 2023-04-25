@@ -18,7 +18,7 @@ router.get("/posts", async (req, res) => {
 	// 작성 날짜 기준 내림 차순 정렬
 	getPost.sort((a,b) => b.date - a.date)
 
-	res.json({post: getPost});
+	return res.json({post: getPost});
 })
 
 // 게시글 작성 API
@@ -37,7 +37,7 @@ router.post("/posts", async (req, res) => {
 	const date = new Date();
 
 	const createPost = await Post.create({ postId, name, author, password, content, date });
-	res.json({post: createPost});
+	return res.json({post: createPost});
 })
 
 // 게시글 조회 API
@@ -59,7 +59,7 @@ router.get("/posts/:postId", async (req, res) => {
 		}
 	})
 
-	res.json({post: getPost});
+	return res.json({post: getPost});
 });
 
 // 게시글 수정 API
@@ -96,7 +96,7 @@ router.put("/posts/:postId", async (req, res) => {
 		}
 	})
 
-	res.json({
+	return res.json({
 		post: putPost,
 		result: "success" 
 	});
@@ -124,16 +124,20 @@ router.delete("/posts/:postId", async (req, res) => {
 		});
 	}
 
-	// 내용 변경
+	// 내용 삭제
 	const deletePost = await Post.deleteOne({
 		postId: Number(postId)
 	})
 
-	res.json({
+	return res.json({
 		post: deletePost,
 		result: "success" 
 	});
 })
+
+// comments의 라우터 구성
+const commentsRouter = require("./comments");
+router.use("/posts/:postId", commentsRouter);
 
 // export router/post.js
 module.exports = router;
