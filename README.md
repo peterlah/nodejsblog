@@ -48,6 +48,8 @@ pm2 delete 0
 - 위와 같은 Directory Structure로 서비스를 구현하기
 - Middleware를 이용하여 Router를 분리해주세요.
 
+# API 명세서
+별도 엑셀파일 첨부
 # 기능 구현
 1. 전체 게시글 목록 조회 API
     - 제목, 작성자명, 작성 날짜를 조회하기
