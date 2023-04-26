@@ -47,16 +47,18 @@ pm2 delete 0
 ```
 
 # 디렉토리 구조
-.<br>
-├── app.js<br>
-├── routes<br>
-│   ├── index.js<br>
-│   ├── comments.js<br>
-│   └── posts.js<br>
+```
+.
+├── app.js
+├── routes
+│   ├── index.js
+│   ├── comments.js
+│   └── posts.js
 └── schemas<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── index.js<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── comment.js<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── post.js<br>
+    ├── index.js
+    ├── comment.js
+    └── post.js
+```
 - 위와 같은 Directory Structure로 서비스를 구현하기
 - Middleware를 이용하여 Router를 분리해주세요.
 
