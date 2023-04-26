@@ -43,11 +43,13 @@ router.post("/posts", async (req, res) => {
 router.get("/posts/:postId", async (req, res) => {
   const { postId } = req.params;
 	const post = await Post.find({postId: Number(postId)});
+
 	if (!post.length) {
 		return res.status(404).json({
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
 		});
 	}
+	
 	const getPost = post.map((value) => {
 		return {
 			name: value["name"],
