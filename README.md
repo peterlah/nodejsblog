@@ -1,7 +1,9 @@
 # 초기 설정
+```
 npm init
 npm install express / npm i express
 npm install mongoose
+```
 
 # 서버 설정
 우분투 20.04
