@@ -6,10 +6,13 @@ npm install mongoose
 # 서버 설정
 우분투 20.04
 1. nodejs 설치
+```
 curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 sudo apt-get install -y nodejs
+```
 
 2. mongodb 설치
+```
 sudo apt-get install gnupg
 curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
    sudo gpg -o /usr/share/keyrings/mongodb-server-6.0.gpg \
@@ -17,22 +20,29 @@ curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-6.0.gpg ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
 sudo apt-get update
 sudo apt-get install -y mongodb-org
+```
 
 3. npm 패키지 설치
+```
 cd "gitclone해온디렉토리"
 npm install
 node app.js
+```
 
 4. iptables 설정 3000 -> 80
+```
 sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3000
+```
 
 5. pm2 설치
+```
 sudo -s
 npm install -g pm2
 <!-- 실행 -->
 pm2 start app.js
 <!-- 종료 -->
 pm2 delete 0 
+```
 
 # 디렉토리 구조
 .<br>
