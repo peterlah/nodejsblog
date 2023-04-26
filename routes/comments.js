@@ -16,7 +16,9 @@ router.get("/comments", async (req, res) => {
 	})
 	getComment.sort((a,b) => b.date - a.date)
 
-	return res.json({post: getComment});
+	return res.json({
+		data: getComment
+	});
 });
 
 // 댓글 작성 API
@@ -31,20 +33,24 @@ router.post("/comments", async (req, res) => {
 		]
 	})
 	if (CheckId.length) {
-    return res.status(400).json({ 
-			success: false, 
+    return res.status(400).json({  
 			errorMessage: "이미 있는 데이터입니다." 
 		});
 	}
 	if (!content.length) {
-		return res.send("댓글 내용을 입력해주세요.");
+		return res.status(400).json({
+			errorMessage: "댓글 내용을 입력해주세요."
+		});
 	}
 
 	// 현재 시간 객체 생성
 	const date = new Date();
 
 	const createContent = await Comment.create({ commentId, postId, content, date });
-	res.json({post: createContent});
+	
+	return res.json({
+		message: "댓글을 생성하였습니다."
+	});
 });
 
 // 댓글 수정 API
@@ -60,14 +66,12 @@ router.put("/comments/:commentId", async (req, res) => {
 		]
 	})
 	if (!CheckId.length) {
-    return res.status(400).json({ 
-			success: false, 
+    return res.status(404).json({ 
 			errorMessage: "댓글이 존재하지 않습니다." 
 		});
 	}
 	if (!content.length) {
 		return res.status(400).json({
-			success: false,
 			errorMessage: "댓글 내용을 입력해주세요."
 		});
 	}
@@ -85,7 +89,9 @@ router.put("/comments/:commentId", async (req, res) => {
 		}
 	});
 
-	res.json({comment: updateComment});
+	return res.json({
+		message: "댓글을 수정하였습니다."
+	});
 });
 
 // 댓글 삭제 API
@@ -100,8 +106,7 @@ router.delete("/comments/:commentId", async (req, res) => {
 		]
 	})
 	if (!CheckId.length) {
-    return res.status(400).json({ 
-			success: false, 
+    return res.status(404).json({ 
 			errorMessage: "댓글이 존재하지 않습니다." 
 		});
 	}
@@ -114,8 +119,7 @@ router.delete("/comments/:commentId", async (req, res) => {
 	});
 
 	return res.json({
-		post: deleteComment,
-		result: "success" 
+		message: "댓글을 삭제하였습니다."
 	});
 });
 

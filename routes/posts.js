@@ -18,7 +18,7 @@ router.get("/posts", async (req, res) => {
 	// 작성 날짜 기준 내림 차순 정렬
 	getPost.sort((a,b) => b.date - a.date)
 
-	return res.json({post: getPost});
+	return res.json({data: getPost});
 })
 
 // 게시글 작성 API
@@ -27,8 +27,7 @@ router.post("/posts", async (req, res) => {
 
 	const post = await Post.find({ postId });
 	if (post.length) {
-    return res.status(400).json({ 
-			success: false, 
+    return res.status(400).json({  
 			errorMessage: "이미 있는 데이터입니다." 
 		});
 	}
@@ -37,7 +36,7 @@ router.post("/posts", async (req, res) => {
 	const date = new Date();
 
 	const createPost = await Post.create({ postId, name, author, password, content, date });
-	return res.json({post: createPost});
+	return res.json({message: "게시글을 생성하였습니다."});
 })
 
 // 게시글 조회 API
@@ -46,7 +45,6 @@ router.get("/posts/:postId", async (req, res) => {
 	const post = await Post.find({postId: Number(postId)});
 	if (!post.length) {
 		return res.status(404).json({
-			success: false,
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
 		});
 	}
@@ -59,7 +57,7 @@ router.get("/posts/:postId", async (req, res) => {
 		}
 	})
 
-	return res.json({post: getPost});
+	return res.json({data: getPost});
 });
 
 // 게시글 수정 API
@@ -72,7 +70,6 @@ router.put("/posts/:postId", async (req, res) => {
 	const post = await Post.find({postId: Number(postId)});
 	if (!post.length) {
 		return res.status(404).json({
-			success: false,
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
 		});
 	}
@@ -80,7 +77,6 @@ router.put("/posts/:postId", async (req, res) => {
 	// 비밀번호 비교
 	if (password !== post[0]["password"]) {
 		return res.status(400).json({
-			success: false,
 			errorMessage: "비밀번호가 일치하지 않습니다."
 		});
 	}
@@ -97,8 +93,7 @@ router.put("/posts/:postId", async (req, res) => {
 	})
 
 	return res.json({
-		post: putPost,
-		result: "success" 
+		message: "게시글을 수정하였습니다."
 	});
 })
 
@@ -111,7 +106,6 @@ router.delete("/posts/:postId", async (req, res) => {
 	const post = await Post.find({postId: Number(postId)});
 	if (!post.length) {
 		return res.status(404).json({
-			success: false,
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
 		});
 	}
@@ -119,7 +113,6 @@ router.delete("/posts/:postId", async (req, res) => {
 	// 비밀번호 비교
 	if (password !== post[0]["password"]) {
 		return res.status(400).json({
-			success: false,
 			errorMessage: "비밀번호가 일치하지 않습니다."
 		});
 	}
@@ -130,8 +123,7 @@ router.delete("/posts/:postId", async (req, res) => {
 	})
 
 	return res.json({
-		post: deletePost,
-		result: "success" 
+		message: "게시글을 삭제하였습니다."
 	});
 })
 
