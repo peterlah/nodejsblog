@@ -4,16 +4,16 @@ npm install express / npm i express
 npm install mongoose
 
 # 디렉토리 구조
-.
-├── app.js
-├── routes
-│   ├── index.js
-│   ├── comments.js
-│   └── posts.js
-└── schemas
-    ├── index.js
-    ├── comment.js
-    └── post.js
+.<br>
+├── app.js<br>
+├── routes<br>
+│   ├── index.js<br>
+│   ├── comments.js<br>
+│   └── posts.js<br>
+└── schemas<br>
+    ├── index.js<br>
+    ├── comment.js<br>
+    └── post.js<br>
 - 위와 같은 Directory Structure로 서비스를 구현하기
 - Middleware를 이용하여 Router를 분리해주세요.
 
