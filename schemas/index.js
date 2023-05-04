@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 // 127.0.0.1:27017/{본인의컬랙션명}
 const connect = () => {
   mongoose
-    .connect("mongodb://127.0.0.1:27017/blog")
+    .connect("mongodb://127.0.0.1:27017/lah_db")
     .catch(err => console.log(err));
 };
 
