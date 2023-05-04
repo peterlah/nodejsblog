@@ -15,6 +15,12 @@ const postsRouter = require("./routes/posts");
 app.use("/", indexRouter);
 app.use("/api", postsRouter);
 
+// 에러 처리 미들웨어
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send("서버에서 에러가 발생하였습니다. 관리자에게 문의 부탁드립니다.");
+});
+
 app.listen(port, () => {
   console.log("Server is running. PORT :", port);
 });
