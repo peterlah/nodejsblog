@@ -10,18 +10,24 @@ const authMiddleware = require("../middlewares/auth-middleware");
 // 전체 게시글 목록 조회 API
 router.get("/posts", async (req, res) => {
 	const postAll = await Post.find({});
-	const getPost = postAll.map((value) => {
-		return {
-			name: value["name"],
-			nickname: value["nickname"],
-			date: value["date"]
-		}
-	})
+
+	postAll.sort((a,b) => b.date - a.date)
+	
+	return res.json({data: getPost});
+	
+	// 원본 코드 - _id값을 조회해보기 편하도록 임시로 모든 정보가 나오도록 변경
+	// const getPost = postAll.map((value) => {
+	// 	return {
+	// 		name: value["name"],
+	// 		nickname: value["nickname"],
+	// 		date: value["date"]
+	// 	}
+	// })
 
 	// 작성 날짜 기준 내림 차순 정렬
-	getPost.sort((a,b) => b.date - a.date)
+	// getPost.sort((a,b) => b.date - a.date)
 
-	return res.json({data: getPost});
+	// return res.json({data: getPost});
 })
 
 // 게시글 작성 API

@@ -6,20 +6,27 @@ const Comment = require("../schemas/comment");
 const authMiddleware = require("../middlewares/auth-middleware");
 
 // 댓글 목록 조회 API
-router.get("/comments", async (req, res) => {
+router.get("/comments", authMiddleware, async (req, res) => {
   const postId = req.params.postId;
 	const commentAll = await Comment.find({postId});
-	const getComment = commentAll.map((value) => {
-		return {
-			date: value["date"],
-			content: value["content"]
-		}
-	})
-	getComment.sort((a,b) => b.date - a.date)
+	commentAll.sort((a,b) => b.date - a.date)
 
 	return res.json({
-		data: getComment
-	});
+		data: commentAll
+	})
+
+	// 원본 코드 - _id값을 조회해보기 편하도록 임시로 모든 정보가 나오도록 변경
+	// const getComment = commentAll.map((value) => {
+	// 	return {
+	// 		date: value["date"],
+	// 		content: value["content"]
+	// 	}
+	// })
+	// getComment.sort((a,b) => b.date - a.date)
+
+	// return res.json({
+	// 	data: getComment
+	// });
 });
 
 // 댓글 작성 API
