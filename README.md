@@ -121,3 +121,10 @@ pm2 delete 0
 
 4. 역할별로 Directory Structure를 분리하였을 경우 어떠한 이점이 있을까요?
 - 코드의 가독성이 올라가서 관리하기 편해집니다.
+
+
+
+# LV2
+```
+npm install jsonwebtoken
+```

@@ -12,8 +12,10 @@ app.use(express.json());
 // 라우터 구성
 const indexRouter = require("./routes/index");
 const postsRouter = require("./routes/posts");
+const usersRouter = require("./routes/users.js");
+const authRouter = require("./routes/auth.js");
 app.use("/", indexRouter);
-app.use("/api", postsRouter);
+app.use("/api", [postsRouter, usersRouter, authRouter]);
 
 // 에러 처리 미들웨어
 app.use((err, req, res, next) => {
