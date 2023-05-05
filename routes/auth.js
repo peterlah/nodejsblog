@@ -22,10 +22,14 @@ router.post("/auth", async (req, res) => {
 
   const token = jwt.sign(
     { userId: user.userId },
-    secretKey,
+    secretKey
   );
 
-	res.cookie("Authorization", `Bearer ${token}`); // JWT를 Cookie로 할당합니다!
+	res.cookie(
+    "Authorization",
+    `Bearer ${token}`,
+    {secure: false}
+  ); // JWT를 Cookie로 할당합니다!
   res.status(200).json({ token }); // JWT를 Body로 할당합니다!
 });
 

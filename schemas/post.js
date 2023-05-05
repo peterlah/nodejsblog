@@ -6,11 +6,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  author: {
-    type: String,
-		required: true
-  },
-  password: {
+  nickname: {
     type: String,
 		required: true
   },

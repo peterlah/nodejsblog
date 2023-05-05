@@ -3,6 +3,7 @@ const router = express.Router({ mergeParams: true });
 
 // 스키마 가져오기
 const Comment = require("../schemas/comment");
+const authMiddleware = require("../middlewares/auth-middleware");
 
 // 댓글 목록 조회 API
 router.get("/comments", async (req, res) => {
@@ -22,7 +23,7 @@ router.get("/comments", async (req, res) => {
 });
 
 // 댓글 작성 API
-router.post("/comments", async (req, res) => {
+router.post("/comments", authMiddleware, async (req, res) => {
   const postId = req.params.postId;
 	const { content } = req.body;
 
@@ -43,7 +44,7 @@ router.post("/comments", async (req, res) => {
 });
 
 // 댓글 수정 API
-router.put("/comments/:commentId", async (req, res) => {
+router.put("/comments/:commentId", authMiddleware, async (req, res) => {
   const postId = req.params.postId;
   const commentId = req.params.commentId;
 	const { content } = req.body;
@@ -86,7 +87,7 @@ router.put("/comments/:commentId", async (req, res) => {
 });
 
 // 댓글 삭제 API
-router.delete("/comments/:commentId", async (req, res) => {
+router.delete("/comments/:commentId", authMiddleware, async (req, res) => {
   const postId = req.params.postId;
   const commentId = req.params.commentId;
 

@@ -6,6 +6,12 @@ const secretKey = "lswsecretkey1357"
 
 // 사용자 인증 미들웨어
 module.exports = async (req, res, next) => {
+  if (req.cookies === undefined) {
+    return res.status(401).json({
+      errorMessage: "로그인 후 이용 가능한 기능입니다."
+    })
+  }
+  
   const { Authorization } = req.cookies;
   const [authType, authToken] = (Authorization ?? "").split(" ");
 

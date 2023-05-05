@@ -1,4 +1,5 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
 const port = 3000;
 
@@ -6,14 +7,15 @@ const port = 3000;
 const connect = require("./schemas");
 connect();
 
-// 미들웨어로 들어오는 http요청을 json으로 파싱
-app.use(express.json());
-
 // 라우터 구성
-const indexRouter = require("./routes/index");
+const indexRouter = require("./routes/index")
 const postsRouter = require("./routes/posts");
-const usersRouter = require("./routes/users.js");
-const authRouter = require("./routes/auth.js");
+const usersRouter = require("./routes/users");
+const authRouter = require("./routes/auth");
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/api", [postsRouter, usersRouter, authRouter]);
 
