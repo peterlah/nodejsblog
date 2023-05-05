@@ -2,14 +2,9 @@ const mongoose = require("mongoose");
 
 // comment 스키마 정의
 const commentSchema = new mongoose.Schema({
-	commentId: {
-    type: Number,
-    required: true,
-    unique: true
-  },
 	postId: {
-    type: Number,
-    required: true,
+    type: String,
+    required: true
   },
   content: {
     type: String,

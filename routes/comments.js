@@ -24,19 +24,8 @@ router.get("/comments", async (req, res) => {
 // 댓글 작성 API
 router.post("/comments", async (req, res) => {
   const postId = req.params.postId;
-	const { commentId, content } = req.body;
+	const { content } = req.body;
 
-	const CheckId = await Comment.find({
-		$and: [
-			{postId},
-			{commentId}
-		]
-	})
-	if (CheckId.length) {
-    return res.status(400).json({  
-			errorMessage: "이미 있는 데이터입니다." 
-		});
-	}
 	if (!content.length) {
 		return res.status(400).json({
 			errorMessage: "댓글 내용을 입력해주세요."
@@ -46,7 +35,7 @@ router.post("/comments", async (req, res) => {
 	// 현재 시간 객체 생성
 	const date = new Date();
 
-	const createContent = await Comment.create({ commentId, postId, content, date });
+	const createContent = await Comment.create({ postId, content, date });
 	
 	return res.json({
 		message: "댓글을 생성하였습니다."
@@ -62,7 +51,7 @@ router.put("/comments/:commentId", async (req, res) => {
 	const CheckId = await Comment.find({
 		$and: [
 			{postId},
-			{commentId}
+			{_id: commentId}
 		]
 	})
 	if (!CheckId.length) {
@@ -80,8 +69,10 @@ router.put("/comments/:commentId", async (req, res) => {
 	const date = new Date();
 
 	const updateComment = await Comment.updateOne({ 
-		postId: Number(postId),
-		commentId: Number(commentId)
+		$and: [
+			{postId},
+			{_id: commentId}
+		]
 	}, {
 		$set:{
 			content: content,
@@ -102,7 +93,7 @@ router.delete("/comments/:commentId", async (req, res) => {
 	const CheckId = await Comment.find({
 		$and: [
 			{postId},
-			{commentId}
+			{_id: commentId}
 		]
 	})
 	if (!CheckId.length) {
@@ -114,7 +105,7 @@ router.delete("/comments/:commentId", async (req, res) => {
 	const deleteComment = await Comment.deleteOne({
 		$and: [
 			{postId},
-			{commentId}
+			{_id: commentId}
 		]
 	});
 

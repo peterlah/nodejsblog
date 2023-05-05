@@ -23,26 +23,19 @@ router.get("/posts", async (req, res) => {
 
 // 게시글 작성 API
 router.post("/posts", async (req, res) => {
-	const { postId, name, author, password, content } = req.body;
-
-	const post = await Post.find({ postId });
-	if (post.length) {
-    return res.status(400).json({  
-			errorMessage: "이미 있는 데이터입니다." 
-		});
-	}
+	const { name, author, password, content } = req.body;
 
 	// 현재 시간 객체 생성
 	const date = new Date();
 
-	const createPost = await Post.create({ postId, name, author, password, content, date });
+	const createPost = await Post.create({ name, author, password, content, date });
 	return res.json({message: "게시글을 생성하였습니다."});
 })
 
 // 게시글 조회 API
 router.get("/posts/:postId", async (req, res) => {
   const { postId } = req.params;
-	const post = await Post.find({postId: Number(postId)});
+	const post = await Post.find({_id: postId});
 
 	if (!post.length) {
 		return res.status(404).json({
@@ -65,11 +58,10 @@ router.get("/posts/:postId", async (req, res) => {
 // 게시글 수정 API
 router.put("/posts/:postId", async (req, res) => {
 	const { postId } = req.params;
-	const { password } = req.query;
-	const { name, author, content } = req.body;
+	const { name, author, password, content } = req.body;
 
 	// 게시글 존재 여부 확인
-	const post = await Post.find({postId: Number(postId)});
+	const post = await Post.find({_id: postId});
 	if (!post.length) {
 		return res.status(404).json({
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
@@ -85,7 +77,7 @@ router.put("/posts/:postId", async (req, res) => {
 
 	// 내용 변경
 	const putPost = await Post.updateOne({
-		postId: Number(postId)
+		_id: postId
 	}, {
 		$set:{
 			name: name,
@@ -102,10 +94,10 @@ router.put("/posts/:postId", async (req, res) => {
 // 게시글 삭제 API
 router.delete("/posts/:postId", async (req, res) => {
 	const { postId } = req.params;
-	const { password } = req.query;
+	const { password } = req.body;
 
 	// 게시글 존재 여부 확인
-	const post = await Post.find({postId: Number(postId)});
+	const post = await Post.find({_id: postId});
 	if (!post.length) {
 		return res.status(404).json({
 			errorMessage: "해당 게시글을 찾을 수 없습니다."
@@ -120,9 +112,7 @@ router.delete("/posts/:postId", async (req, res) => {
 	}
 
 	// 내용 삭제
-	const deletePost = await Post.deleteOne({
-		postId: Number(postId)
-	})
+	const deletePost = await Post.deleteOne({_id: postId})
 
 	return res.json({
 		message: "게시글을 삭제하였습니다."
