@@ -48,13 +48,4 @@ router.post("/users", async (req, res) => {
   res.status(201).json({});
 });
 
-// // 내 정보 조회 API
-// router.get("/users/me", authMiddleware, async (req, res) => {
-//   const { email, nickname } = res.locals.user;
-  
-//   res.status(200).json({
-//     user: { email, nickname }
-//   });
-// });
-
 module.exports = router;
