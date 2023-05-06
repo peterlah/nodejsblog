@@ -8,7 +8,7 @@ const secretKey = "lswsecretkey1357";
 module.exports = async (req, res, next) => {
   if (req.cookies === undefined) {
     return res.status(401).json({
-      errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      errorMessage: "로그인 후 이용 가능한 기능입니다."
     });
   }
 
@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
 
   if (!authToken || authType !== "Bearer") {
     return res.status(401).send({
-      errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      errorMessage: "로그인 후 이용 가능한 기능입니다."
     });
   }
 
@@ -27,9 +27,9 @@ module.exports = async (req, res, next) => {
     res.locals.user = user;
     next();
   } catch (err) {
-    console.error(err);
+    console.error(err.stack);
     res.status(401).send({
-      errorMessage: "로그인 후 이용 가능한 기능입니다.",
+      errorMessage: "로그인 후 이용 가능한 기능입니다."
     });
   }
 };

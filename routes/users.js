@@ -14,7 +14,7 @@ router.post("/users", async (req, res) => {
   if (!idRegex.test(nickname)) {
     return res.status(400).json({
       errorMessage:
-        "아이디는 최소 3자 이상이어야 하며, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)만 사용 가능합니다.",
+        "아이디는 최소 3자 이상이어야 하며, 알파벳 대소문자(a~z, A~Z), 숫자(0~9)만 사용 가능합니다."
     });
   }
 
@@ -24,14 +24,14 @@ router.post("/users", async (req, res) => {
   if (!pwRegex.test(password)) {
     return res.status(400).json({
       errorMessage:
-        "비밀번호는 최소 4자 이상이어야 하며, 닉네임과 같은 값이 포함되면 안됩니다.",
+        "비밀번호는 최소 4자 이상이어야 하며, 닉네임과 같은 값이 포함되면 안됩니다."
     });
   }
 
   // 패스워드와 패스워드 확인 비교
   if (password !== confirmPassword) {
     return res.status(400).json({
-      errorMessage: "패스워드가 패스워드 확인란과 다릅니다.",
+      errorMessage: "패스워드가 패스워드 확인란과 다릅니다."
     });
   }
 
@@ -40,14 +40,21 @@ router.post("/users", async (req, res) => {
   if (existsUsers) {
     // NOTE: 보안을 위해 인증 메세지는 자세히 설명하지 않습니다.
     return res.status(400).json({
-      errorMessage: "중복된 닉네임입니다.",
+      errorMessage: "중복된 닉네임입니다."
     });
   }
 
-  const user = new User({ nickname, password });
-  await user.save();
+  try {
+    const user = new User({ nickname, password });
+    await user.save();
 
-  res.status(201).json({});
+    res.status(201).json({});
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({
+      errorMessage: "서버에서 에러가 발생하였습니다. 관리자에게 문의 부탁드립니다."
+    })
+  }
 });
 
 module.exports = router;
