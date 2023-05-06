@@ -4,18 +4,18 @@ const mongoose = require("mongoose");
 const postSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   nickname: {
     type: String,
-		required: true
+    required: true,
   },
   content: {
-    type: String
+    type: String,
   },
-	date: {
-		type: Date
-	}
+  date: {
+    type: Date,
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);

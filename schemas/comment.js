@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 // comment 스키마 정의
 const commentSchema = new mongoose.Schema({
-	postId: {
+  postId: {
     type: String,
-    required: true
+    required: true,
   },
   content: {
     type: String,
-		required: true
+    required: true,
   },
-	date: {
+  date: {
     type: Date,
-		required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Comment", commentSchema);

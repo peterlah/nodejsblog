@@ -3,12 +3,12 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const port = 3000;
 
-// DB 연결, schemas/index.js를 통해 DB 연결 
+// DB 연결, schemas/index.js를 통해 DB 연결
 const connect = require("./schemas");
 connect();
 
 // 라우터 구성
-const indexRouter = require("./routes/index")
+const indexRouter = require("./routes/index");
 const postsRouter = require("./routes/posts");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
@@ -22,7 +22,9 @@ app.use("/api", [postsRouter, usersRouter, authRouter]);
 // 에러 처리 미들웨어
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send("서버에서 에러가 발생하였습니다. 관리자에게 문의 부탁드립니다.");
+  res
+    .status(500)
+    .send("서버에서 에러가 발생하였습니다. 관리자에게 문의 부탁드립니다.");
 });
 
 app.listen(port, () => {

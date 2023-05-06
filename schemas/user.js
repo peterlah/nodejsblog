@@ -1,15 +1,17 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  nickname: { // nickname 필드
+  nickname: {
+    // nickname 필드
     type: String,
     required: true,
     unique: true,
   },
-  password: { // password 필드
+  password: {
+    // password 필드
     type: String,
     required: true,
-  }
+  },
 });
 
 // 가상의 userId 값을 할당
