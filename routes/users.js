@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../schemas/user");
-const authMiddleware = require("../middlewares/auth-middleware");
 
 // 회원가입 API
 router.post("/users", async (req, res) => {

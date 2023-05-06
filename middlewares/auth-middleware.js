@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/user");
+const secretConfig = require("../secret-config.json");
 
 // 시크릿 키 정의
-const secretKey = "lswsecretkey1357";
+const secretKey = secretConfig.jwtSecret;
 
 // 사용자 인증 미들웨어
 module.exports = async (req, res, next) => {

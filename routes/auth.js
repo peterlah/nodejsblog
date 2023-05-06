@@ -1,12 +1,13 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
+const secretConfig = require("../secret-config.json");
 
 // 스키마 가져오기
 const User = require("../schemas/user");
 
 // 시크릿 키 정의
-const secretKey = "lswsecretkey1357";
+const secretKey = secretConfig.jwtSecret;
 
 // 로그인 API
 router.post("/auth", async (req, res) => {
