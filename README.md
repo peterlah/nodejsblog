@@ -191,4 +191,4 @@ npm install jsonwebtoken cookie-parser
 ```
 
 # ERD 추가
-![ERD](.\ERD.png)
+![ERD](/ERD.png)
