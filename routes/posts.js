@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const { Op } = require("sequelize");
 
-// 스키마 가져오기
-const Post = require("../schemas/post");
+// 모델 가져오기
+const { Posts } = require("../models");
 
 // 인증을 위한 미들웨어 가져오기
 const authMiddleware = require("../middlewares/auth-middleware");
@@ -10,21 +11,11 @@ const authMiddleware = require("../middlewares/auth-middleware");
 // 전체 게시글 목록 조회 API
 router.get("/posts", async (req, res) => {
   try {
-    const postAll = await Post.find({});
-    postAll.sort((a, b) => b.date - a.date);
-    return res.json({ data: postAll });
-
-    // // 원본 코드 - _id값을 조회해보기 편하도록 임시로 모든 정보가 나오도록 변경
-    // const getPost = postAll.map((value) => {
-    // 	return {
-    // 		name: value["name"],
-    // 		nickname: value["nickname"],
-    // 		date: value["date"]
-    // 	}
-    // })
-    // // 작성 날짜 기준 내림 차순 정렬
-    // getPost.sort((a,b) => b.date - a.date)
-    // return res.json({data: getPost});
+    const posts = await Posts.findAll({
+      attributes: ["postId", "name", "nickname", "createdAt", "updatedAt"],
+      order: [['createdAt', 'ASC']],
+    });
+    return res.status(200).json({ data: posts });
   } catch (err) {
     console.log(err);
     res.status(500).send({
@@ -36,12 +27,11 @@ router.get("/posts", async (req, res) => {
 // 게시글 작성 API
 router.post("/posts", authMiddleware, async (req, res) => {
   try {
-    const nickname = res.locals.user["nickname"];
+    const { userId } = res.locals.user;
+    const { nickname } = res.locals.user;
     const { name, content } = req.body;
   
-    // 현재 시간 객체 생성
-    const date = new Date();
-    const createPost = await Post.create({ name, nickname, content, date });
+    const createPost = await Posts.create({ name, nickname, content, UserId: userId });
     return res.json({ message: "게시글을 생성하였습니다." });
   } catch (err) {
     console.log(err);
@@ -53,29 +43,16 @@ router.post("/posts", authMiddleware, async (req, res) => {
 
 // 게시글 조회 API
 router.get("/posts/:postId", authMiddleware, async (req, res) => {
-  const nickname = res.locals.user["nickname"];
-  const { postId } = req.params;
-  const post = await Post.find({
-    $and: [{ nickname }, { _id: postId }],
-  });
-
-  if (!post.length) {
-    return res.status(404).json({
-      errorMessage: "해당 게시글을 찾을 수 없습니다.",
-    });
-  }
-  
   try {
-    const getPost = post.map((value) => {
-      return {
-        name: value["name"],
-        nickname: value["nickname"],
-        date: value["date"],
-        content: value["content"],
-      };
+    const { userId } = res.locals.user;
+    const { postId } = req.params;
+    const post = await Posts.findOne({
+      attributes: ["name", "nickname", "content", "createdAt", "updatedAt" ],
+      where: { 
+        [Op.and]: [ { postId }, { UserId: userId } ]
+      }
     });
-
-    return res.json({ data: getPost });
+    return res.status(200).json({ data: post });
   } catch (err) {
     console.log(err);
     res.status(500).send({
@@ -86,36 +63,42 @@ router.get("/posts/:postId", authMiddleware, async (req, res) => {
 
 // 게시글 수정 API
 router.put("/posts/:postId", authMiddleware, async (req, res) => {
-  const nickname = res.locals.user["nickname"];
+  const { userId } = res.locals.user;
   const { postId } = req.params;
   const { name, content } = req.body;
 
   // 게시글 존재 여부 확인
-  const post = await Post.find({
-    $and: [{ nickname }, { _id: postId }],
+  const post = await Posts.findOne({
+    where: { 
+      [Op.and]: [ { postId }, { UserId: userId } ]
+    }
   });
-  if (!post.length) {
+
+  if (!post) {
     return res.status(404).json({
       errorMessage: "해당 게시글을 찾을 수 없습니다.",
     });
-  }
+  } else if (post.UserId !== userId) {
+    return res.status(401).json({ 
+      errorMessage: "권한이 없습니다." 
+    });
+  };
 
   try {
     // 내용 변경
-    const putPost = await Post.updateOne(
-      {
-        _id: postId,
+    const putPost = await Posts.update(
+      { // name, content 컬럼을 수정
+        name: name,
+        content: content
       },
       {
-        $set: {
-          name: name,
-          nickname: nickname,
-          content: content,
-        },
-      }
+        where: {
+          [Op.and]: [ { postId }, { UserId: userId } ]
+        }
+      },
     );
 
-    return res.json({
+    return res.status(200).json({
       message: "게시글을 수정하였습니다.",
     });
   } catch (err) {
@@ -128,22 +111,31 @@ router.put("/posts/:postId", authMiddleware, async (req, res) => {
 
 // 게시글 삭제 API
 router.delete("/posts/:postId", authMiddleware, async (req, res) => {
-  const nickname = res.locals.user["nickname"];
+  const { userId } = res.locals.user;
   const { postId } = req.params;
 
   // 게시글 존재 여부 확인
-  const post = await Post.find({
-    $and: [{ nickname }, { _id: postId }],
+  const post = await Posts.findOne({
+    where: { postId }
   });
-  if (!post.length) {
+
+  if (!post) {
     return res.status(404).json({
       errorMessage: "해당 게시글을 찾을 수 없습니다.",
     });
-  }
+  } else if (post.UserId !== userId) {
+    return res.status(401).json({ 
+      errorMessage: "권한이 없습니다." 
+    });
+  };
 
   try {
     // 내용 삭제
-    const deletePost = await Post.deleteOne({ _id: postId });
+    const deletePost = await Posts.destroy({ 
+      where: {
+        [Op.and]: [{ postId }, { UserId: userId }]
+      }
+    });
     return res.json({
       message: "게시글을 삭제하였습니다.",
     });
@@ -154,10 +146,6 @@ router.delete("/posts/:postId", authMiddleware, async (req, res) => {
     })
   }
 });
-
-// comments의 라우터 구성
-const commentsRouter = require("./comments");
-router.use("/posts/:postId", commentsRouter);
 
 // export router/post.js
 module.exports = router;

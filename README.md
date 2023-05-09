@@ -217,3 +217,23 @@ npm install jsonwebtoken cookie-parser
     - 토큰을 검사하여, 해당 사용자가 작성한 게시글만 수정 가능
 7. 게시글 삭제 API
     - 토큰을 검사하여, 해당 사용자가 작성한 게시글만 삭제 가능
+
+# 추가 구성
+npm install sequelize mysql2
+npm install -D sequelize-cli nodemon
+npx sequelize init
+
+# Users 모델
+npx sequelize model:generate --name Users --attributes nickname:string,password:string
+
+# Posts 모델
+npx sequelize model:generate --name Posts --attributes name:string,nickname:string,content:string,date:date
+
+# config/config.json에 설정된 DB를 생성합니다. 
+npx sequelize db:create
+
+# 해당 프로젝트에 Migrations에 정의된 Posts 테이블을 MySQL에 생성합니다.
+npx sequelize db:migrate
+
+# nodemon을 이용해 프로젝트를 실행합니다.
+npx nodemon app.js

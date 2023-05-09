@@ -1,11 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
-const port = 3000;
-
-// DB 연결, schemas/index.js를 통해 DB 연결
-const connect = require("./schemas");
-connect();
+const port = 8080;
 
 // 라우터 구성
 const { indexRouter, postsRouter, usersRouter, authRouter} = require("./routes");

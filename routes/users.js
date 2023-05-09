@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const User = require("../schemas/user");
+// 모델 가져오기
+const { Users } = require("../models");
 
 // 회원가입 API
 router.post("/users", async (req, res) => {
@@ -35,7 +36,7 @@ router.post("/users", async (req, res) => {
   }
 
   // nickname이 동일한 데이터가 있는지 확인하기 위해 가져온다.
-  const existsUsers = await User.findOne({ nickname });
+  const existsUsers = await Users.findOne({ where: { nickname } });
   if (existsUsers) {
     // NOTE: 보안을 위해 인증 메세지는 자세히 설명하지 않습니다.
     return res.status(400).json({
@@ -44,10 +45,8 @@ router.post("/users", async (req, res) => {
   }
 
   try {
-    const user = new User({ nickname, password });
-    await user.save();
-
-    res.status(201).json({});
+    const user = await Users.create({ nickname, password });
+    res.status(201).json({ message: "회원가입이 완료되었습니다." });
   } catch (err) {
     console.log(err);
     res.status(500).send({

@@ -1,10 +1,10 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
-const secretConfig = require("../secret-config.json");
+const secretConfig = require("../config/secret-config.json");
 
-// 스키마 가져오기
-const User = require("../schemas/user");
+// 모델 가져오기
+const { Users } = require("../models");
 
 // 시크릿 키 정의
 const secretKey = secretConfig.jwtSecret;
@@ -12,7 +12,7 @@ const secretKey = secretConfig.jwtSecret;
 // 로그인 API
 router.post("/auth", async (req, res) => {
   const { nickname, password } = req.body;
-  const user = await User.findOne({ nickname });
+  const user = await Users.findOne({ where : { nickname } });
 
   if (!user || password !== user.password) {
     return res.status(400).json({
