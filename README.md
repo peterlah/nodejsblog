@@ -171,3 +171,24 @@ npm install jsonwebtoken cookie-parser
 8. 댓글 삭제 API
     - 로그인 토큰을 검사하여, 해당 사용자가 작성한 댓글만 삭제 가능
     - 원하는 댓글을 삭제하기
+
+
+# .env 확인
+```
+// https://velog.io/@hoho_0815/env-%ED%8C%8C%EC%9D%BC%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC
+// .env 활용 모듈 - dotenv
+// nodeJS 의 모듈로, npm 을 사용해 설치하고 사용 할 수 있습니다.
+// dotenv 를 사용해 현재 디렉토리에 위치한 .env 파일로부터 환경 변수를 읽어 낼 수 있습니다.
+// npm install dotenv
+
+// require("dotenv").config();
+// 애플리케이션이 작동될 때 가장 먼저 실행되는 js파일의 최상단에서 config() 함수를 호출 하면 .env파일에 저장된 환경 변수를 process.env 모듈을 통해 불러올 수 있습니다.
+
+// 정리
+// env 파일은 " 환경 변수 파일 " 을 의미한다.
+// 이 파일은, 애플리케이션이 실행될 때 넘기고 싶은 특정 값을 담고 있는 변수가 기록되어 있다.
+// 미리 정의된 값을 애플리케이션에서 활용하고 싶을 때 이 .env 파일을 활용한다.
+```
+
+# ERD 추가
+![ERD](.\ERD.png)
