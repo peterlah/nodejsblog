@@ -1,13 +1,16 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const router = express.Router();
-const secretConfig = require("../config/secret-config.json");
+
+//import dotenv from 'dotenv'
+require('dotenv').config();
+const env = process.env;
 
 // 모델 가져오기
 const { Users } = require("../models");
 
 // 시크릿 키 정의
-const secretKey = secretConfig.jwtSecret;
+const secretKey = env.JWT_SECRET;
 
 // 로그인 API
 router.post("/auth", async (req, res) => {

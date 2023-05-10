@@ -1,9 +1,12 @@
 const jwt = require("jsonwebtoken");
 const { Users } = require("../models");
-const secretConfig = require("../config/secret-config.json");
+
+//import dotenv from 'dotenv'
+require('dotenv').config();
+const env = process.env;
 
 // 시크릿 키 정의
-const secretKey = secretConfig.jwtSecret;
+const secretKey = env.JWT_SECRET;
 
 // 사용자 인증 미들웨어
 module.exports = async (req, res, next) => {

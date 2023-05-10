@@ -237,3 +237,12 @@ npx sequelize db:migrate
 
 # nodemon을 이용해 프로젝트를 실행합니다.
 npx nodemon app.js
+
+# ** 코드개선 **
+# 1. 시크릿 키정보 등을 별도로 관리해보기
+```
+npm install dotenv
+
+# .env 파일 생성
+
+```
