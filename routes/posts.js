@@ -44,14 +44,14 @@ router.post("/posts", authMiddleware, async (req, res) => {
 });
 
 // 게시글 조회 API
-router.get("/posts/:postId", authMiddleware, async (req, res) => {
+router.get("/posts/:postId", async (req, res) => {
   try {
-    const { userId } = res.locals.user;
+    // const { userId } = res.locals.user;
     const { postId } = req.params;
     const post = await Posts.findOne({
       attributes: ["name", "nickname", "content", "createdAt", "updatedAt" ],
       where: { 
-        [Op.and]: [ { postId }, { UserId: userId } ]
+        [Op.and]: [ { postId }]
       }
     });
     return res.status(200).json({ data: post });
@@ -87,11 +87,15 @@ router.put("/posts/:postId", authMiddleware, async (req, res) => {
       });
     };
 
+    // 현재 시간 객체 생성
+    const date = new Date();
+
     // 게시글 내용 변경
     const putPost = await Posts.update(
       { // name, content 컬럼을 수정
         name: name,
-        content: content
+        content: content,
+        updatedAt: date
       },
       {
         where: {
