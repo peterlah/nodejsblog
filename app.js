@@ -1,7 +1,7 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
-const port = 8080;
+const port = 3000;
 
 // 라우터 구성
 const { indexRouter, postsRouter, usersRouter, authRouter} = require("./routes");
