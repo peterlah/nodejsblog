@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+
+// Sequlize Operation 연산 사용을 위해 추가
 const { Op } = require("sequelize");
 
 // 모델 가져오기
@@ -63,29 +65,29 @@ router.get("/posts/:postId", authMiddleware, async (req, res) => {
 
 // 게시글 수정 API
 router.put("/posts/:postId", authMiddleware, async (req, res) => {
-  const { userId } = res.locals.user;
-  const { postId } = req.params;
-  const { name, content } = req.body;
-
-  // 게시글 존재 여부 확인
-  const post = await Posts.findOne({
-    where: { 
-      [Op.and]: [ { postId }, { UserId: userId } ]
-    }
-  });
-
-  if (!post) {
-    return res.status(404).json({
-      errorMessage: "해당 게시글을 찾을 수 없습니다.",
-    });
-  } else if (post.UserId !== userId) {
-    return res.status(401).json({ 
-      errorMessage: "권한이 없습니다." 
-    });
-  };
-
   try {
-    // 내용 변경
+    const { userId } = res.locals.user;
+    const { postId } = req.params;
+    const { name, content } = req.body;
+
+    // 게시글 존재 여부 확인
+    const post = await Posts.findOne({
+      where: { 
+        [Op.and]: [ { postId }, { UserId: userId } ]
+      }
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        Message: "해당 게시글을 찾을 수 없습니다.",
+      });
+    } else if (post.UserId !== userId) {
+      return res.status(401).json({ 
+        Message: "권한이 없습니다." 
+      });
+    };
+
+    // 게시글 내용 변경
     const putPost = await Posts.update(
       { // name, content 컬럼을 수정
         name: name,
@@ -111,26 +113,26 @@ router.put("/posts/:postId", authMiddleware, async (req, res) => {
 
 // 게시글 삭제 API
 router.delete("/posts/:postId", authMiddleware, async (req, res) => {
-  const { userId } = res.locals.user;
-  const { postId } = req.params;
-
-  // 게시글 존재 여부 확인
-  const post = await Posts.findOne({
-    where: { postId }
-  });
-
-  if (!post) {
-    return res.status(404).json({
-      errorMessage: "해당 게시글을 찾을 수 없습니다.",
-    });
-  } else if (post.UserId !== userId) {
-    return res.status(401).json({ 
-      errorMessage: "권한이 없습니다." 
-    });
-  };
-
   try {
-    // 내용 삭제
+    const { userId } = res.locals.user;
+    const { postId } = req.params;
+
+    // 게시글 존재 여부 확인
+    const post = await Posts.findOne({
+      where: { postId }
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        Message: "해당 게시글을 찾을 수 없습니다.",
+      });
+    } else if (post.UserId !== userId) {
+      return res.status(401).json({ 
+        Message: "권한이 없습니다." 
+      });
+    };
+
+    // 게시글 내용 삭제
     const deletePost = await Posts.destroy({ 
       where: {
         [Op.and]: [{ postId }, { UserId: userId }]
